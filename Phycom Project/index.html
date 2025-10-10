@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Morse Code Monitor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="#home">Morse Monitor</a>
+    </div>
+    <div class="nav-right">
+      <a href="#monitor">Monitor</a>
+      <a href="document.html">Document</a>    
+    </div>
+  </nav>
+
+  <div class="content" id="monitor">
+    <h1>Morse Code Monitor</h1>
+    <p>Code: <span id="morse"></span></p>
+    <p>Decoded: <span id="decoded"></span></p>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <img src="mos.jpg" alt="Morse Code" class="mos-img">
+  </div>
+
+  <script>
+    const arduinoIP = "http://172.20.10.3"; // 🔸 เปลี่ยนเป็น IP ของบอร์ดคุณ
+
+    async function update() {
+      try {
+        const res = await fetch(`${arduinoIP}/data`);
+        const data = await res.json();
+        document.getElementById("morse").innerText = data.morse;
+        document.getElementById("decoded").innerText = data.decoded;
+      } catch (err) {
+        console.error("Connection error:", err);
+      }
+    }
+
+    setInterval(update, 1000);
+    update();
+  </script>
+</body>
+</html>

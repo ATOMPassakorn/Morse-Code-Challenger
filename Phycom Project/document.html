@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Documents - Morse Monitor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="index.html">Morse Monitor</a>
+    </div>
+    <div class="nav-right">
+      <a href="index.html#monitor">Monitor</a>
+      <a href="document.html" class="active">Document</a>
+      <a href="#Members">Members</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <h1>Morse Code Monitor Project</h1>
+    <p>This project is designed to receive Morse code input through buttons,<br>
+       decode it into English letters, and display the results on an LCD screen and a web interface via Wi-Fi.</p>
+  </div>
+
+  <div class="content">
+    <h2>Morse Code Monitor Project Video</h2>
+    <iframe 
+      width="640" 
+      height="360"
+      src="https://www.youtube.com/embed/tgbNymZ7vqY"
+      title="Project Demo Video"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <section class="section" id="used">
+    <div class="container">
+      <h2>Equipment Used</h2>
+      <div class="grid">
+        <div class="item">
+          <img src="r4 wifi.jpg" alt="Arduino UNO R4 WiFi">
+          <h3>Arduino UNO R4 WiFi</h3>
+          <p>A microcontroller board with built-in Wi-Fi and Bluetooth for IoT applications.</p>
+        </div>
+        <div class="item">
+          <img src="lcd dis.jpg" alt="LCD 16x2 Display">
+          <h3>LCD Display 16x2</h3>
+          <p>A character display module that can show 2 lines of 16 characters. Commonly used with Arduino.</p>
+        </div>
+        <div class="item">
+          <img src="btn.jpg" alt="Button">
+          <h3>Button</h3>
+          <p>A small momentary switch that connects the circuit only while pressed.</p>
+        </div>
+        <div class="item">
+          <img src="LED.png" alt="LED">
+          <h3>LED</h3>
+          <p>LEDs used as visual indicators to show different system statuses.</p>
+      </div>
+      <div class="item">
+          <img src="buzzer.jpg" alt="buzzer">
+          <h3>buzzer</h3>
+          <p>A small buzzer module that produces sound alerts in response to signals from Arduino.</p>
+    </div>
+  </section>
+
+  <section class="source-section" id="source">
+    <h2>Source Code</h2>
+    <div class="code-box">
+      <pre>
+#include "LiquidCrystal_I2C.h"
+#include "WiFiS3.h"
+
+
+char ssid[] = "";
+char pass[] = "";
+
+WiFiServer server(80);
+
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+
+const int BTN = 2;
+const int BTN_2 = 3;
+const int enterBTN = 4;
+const int deleteBTN = 5;
+bool firstEnter = true;
+
+
+int col = 0;
+int row = 0;
+int opCol = 0;
+int ctn = 0;
+
+String morseCode = "";
+String output = "";
+
+
+unsigned long lastButtonActionTime = 0;
+const long debounceDelay = 250;
+
+unsigned long lastMorseCodeTime = 0;
+const long morseTimeout = 1500;
+
+
+struct MorsePair {
+  const char* code;
+  char letter;
+};
+
+MorsePair morseTable[] = {
+  {".-", 'A'}, {"-...", 'B'}, {"-.-.", 'C'}, {"-..", 'D'},
+  {".", 'E'}, {"..-.", 'F'}, {"--.", 'G'}, {"....", 'H'},
+  {"..", 'I'}, {".---", 'J'}, {"-.-", 'K'}, {".-..", 'L'},
+  {"--", 'M'}, {"-.", 'N'}, {"---", 'O'}, {".--.", 'P'},
+  {"--.-", 'Q'}, {".-.", 'R'}, {"...", 'S'}, {"-", 'T'},
+  {"..-", 'U'}, {"...-", 'V'}, {".--", 'W'}, {"-..-", 'X'},
+  {"-.--", 'Y'}, {"--..", 'Z'}
+};
+
+char decodeMorse(String code) {
+  for (int i = 0; i < sizeof(morseTable) / sizeof(morseTable[0]); i++) {
+    if (code == morseTable[i].code) {
+      return morseTable[i].letter;
+    }
+  }
+  return '?'; // ถ้าไม่พบ
+}
+
+void setup() {
+  Serial.begin(9600);
+  lcd.init();
+  lcd.backlight();
+  lcd.print(" Hello, Welcome!");
+  lcd.setCursor(0, 1);
+  lcd.print("Morse Code Game!");
+  pinMode(BTN, INPUT_PULLUP);
+  pinMode(BTN_2, INPUT_PULLUP);
+  pinMode(enterBTN, INPUT_PULLUP);
+  pinMode(deleteBTN, INPUT_PULLUP);
+
+  Serial.println("Connecting to WiFi...");
+  while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
+    Serial.print(".");
+    // Note: delay(1000) ใน setup ไม่กระทบต่อ Web Server
+    delay(1000); 
+  }
+  
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println("Web Server Started.");
+
+  server.begin();
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+
+
+  WiFiClient client = server.available();
+  if (client) {
+    String req = client.readStringUntil('\r');
+    client.flush();
+
+    if (req.indexOf("/data") != -1) {
+      client.println("HTTP/1.1 200 OK");
+      client.println("Access-Control-Allow-Origin: *");
+      client.println("Content-Type: application/json");
+      client.println("Connection: close");
+      client.println();
+      client.print("{\"morse\":\"");
+      client.print(morseCode);
+      client.print("\",\"decoded\":\"");
+      client.print(output);
+      client.println("\"}");
+    }
+
+    client.stop();
+  }
+
+  if (morseCode.length() > 0 && (currentMillis - lastMorseCodeTime > morseTimeout)) {
+    char decoded = decodeMorse(morseCode);
+    if (decoded != '?') {
+      output += decoded;
+    }
+    
+    morseCode = "";
+    ctn = 0;
+    
+    lcd.clear();
+    lcd.setCursor(0, 1);
+    lcd.print(output);
+    
+    lastMorseCodeTime = currentMillis;
+  }
+  
+  if (currentMillis - lastButtonActionTime > debounceDelay) {
+    
+    if (firstEnter && (digitalRead(BTN) == LOW || digitalRead(BTN_2) == LOW)) {
+      firstEnter = false;
+      lcd.clear();
+      lastButtonActionTime = currentMillis;
+    }
+
+    if (digitalRead(BTN) == LOW) {
+      morseCode += "-";
+      ctn++;
+      lastButtonActionTime = currentMillis;
+      lastMorseCodeTime = currentMillis;
+      lcd.setCursor(0, 0);
+      lcd.print("Code:" + morseCode + "        ");
+    }
+
+
+    if (digitalRead(BTN_2) == LOW) {
+      morseCode += ".";
+      ctn++;
+      lastButtonActionTime = currentMillis;
+      lastMorseCodeTime = currentMillis;
+      lcd.setCursor(0, 0);
+      lcd.print("Code:" + morseCode + "        ");
+    }
+
+    if (digitalRead(enterBTN) == LOW) {
+      if (morseCode.length() > 0) {
+        char decoded = decodeMorse(morseCode);
+        if (decoded != '?') {
+          output += decoded;
+          opCol++;
+        }
+        morseCode = "";
+        ctn = 0;
+
+        lcd.clear();
+        lcd.setCursor(0, 1);
+        lcd.print(output);
+        lastButtonActionTime = currentMillis;
+        lastMorseCodeTime = currentMillis;
+      }
+    }
+
+    if (digitalRead(deleteBTN) == LOW) {
+      if (output.length() > 0) {
+        output.remove(output.length() - 1);
+        opCol--;
+        if (opCol < 0) opCol = 0;
+        
+        lcd.clear();
+        lcd.setCursor(0, 1);
+        lcd.print(output);
+        lastButtonActionTime = currentMillis;
+      }
+    }
+    
+    if (digitalRead(enterBTN) == LOW && digitalRead(deleteBTN) == LOW){
+      if (morseCode.length() > 0) {
+        morseCode.remove(morseCode.length() - 1);
+        
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Code:" + morseCode + "        ");
+        lcd.setCursor(0, 1);
+        lcd.print(output);
+        lastButtonActionTime = currentMillis;
+      }
+    }
+    
+  }
+
+  if (opCol > 16) {
+    opCol = 0;
+    lcd.clear();
+    lcd.setCursor(0, 1);
+  }
+}
+
+void printMacAddress(byte mac[]) {
+  for (int i = 0; i < 6; i++) {
+    if (mac[i] < 16) Serial.print("0");
+    Serial.print(mac[i], HEX);
+    if (i < 5) Serial.print(":");
+  }
+  Serial.println();
+}
+      </pre>
+    </div>
+  </div>
+
+  <section class="section" id="Members">
+    <div class="container">
+      <h2>Members</h2>
+      <div class="grid">
+        <div class="item">
+          <img src="Anan.png" alt="Member 1">
+          <h3>Patcharanatakorn A</h3>
+          <p>67070106</p>
+        </div>
+        <div class="item">
+          <img src="peera.jpeg" alt="Member 2">
+          <h3>Peerapat S</h3>
+          <p>67070121</p>
+        </div>
+        <div class="item">
+          <img src="tom.jpeg" alt="Member 3">
+          <h3>Passakorn T</h3>
+          <p>67070134</p>
+        </div>
+        <div class="item">
+          <img src="poom.jpeg" alt="Member 4">
+          <h3>Rattapoom R</h3>
+          <p>67070152</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
