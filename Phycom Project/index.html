@@ -18,7 +18,7 @@
   </nav>
 
   <div class="content" id="monitor">
-    <h1>Morse Code Monitor</h1>
+    <h1><b>Morse Code Monitor</b></h1>
     <p>Time left: <span id="timer">30</span> sec</p>
     <p>Code: <span id="morse"></span></p>
     <p>Decoded: <span id="decoded"></span></p>
@@ -38,34 +38,33 @@
   let countdown = 30;
   let timerInterval;
 
+
+// โค้ดใหม่ที่แก้ไขแล้ว
   async function update() {
     try {
       const res = await fetch(`${arduinoIP}/data`);
       const data = await res.json();
 
       if (data.gameOver) {
-        clearInterval(timerInterval);
-        countdown = 30;
-        document.getElementById("timer").innerText = countdown;
+        clearInterval(timerInterval); // หยุดนับถอยหลัง
+        gameStarted = false;
+
+        // เรียก endpoint ใหม่สำหรับตอนตอบถูก (ไม่มีไฟแดง)
+        await fetch(`${arduinoIP}/correctReset`); 
+
+        // รีเซ็ตหน้าจอเว็บ
+        document.getElementById("timer").innerText = 30;
         document.getElementById("morse").innerText = "";
         document.getElementById("decoded").innerText = "";
         document.getElementById("target").innerText = "";
-        gameStarted = false;
-        return;
+        return; // ออกจากการทำงาน
       }
+
       if (!gameStarted) return;
 
       document.getElementById("morse").innerText = data.morse;
       document.getElementById("decoded").innerText = data.decoded;
       document.getElementById("target").innerText = data.target;
-
-      if (data.decoded === data.target && data.target !== "") {
-        clearInterval(timerInterval);
-        countdown = 30;
-        document.getElementById("timer").innerText = countdown;
-        await fetch(`${arduinoIP}/setTimer`);
-        startCountdown();
-      }
 
     } catch (err) {
       console.error("Connection error:", err);
