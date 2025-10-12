@@ -2,7 +2,9 @@ body {
   font-family: sans-serif;
   text-align: center;
   margin: 0;
-  background-color: #f4f4f9;
+  background: #1264B9;
+  background: linear-gradient(135deg, #1264B9, #C026E9);
+  padding-bottom: 4vh;
 }
 
 .navbar {
@@ -16,6 +18,23 @@ body {
   padding: 15px 40px;
   box-sizing: border-box;
   z-index: 1000;
+}
+
+.homepage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-bg {
+  margin-top: 15vh;
+  width: 50%;
+  -webkit-backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.2); /* โปร่งเล็กน้อย */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
 }
 
 .navbar a {
@@ -36,20 +55,23 @@ body {
 }
 
 .content {
+  color: #ffffff;
+  text-shadow: 4px 4px 55px rgba(0,0,0,0.4);
   margin-top: 100px;
 }
 
 h1 {
-  color: #0066cc;
+  color: #ffffff;
+  font-size: 6vh;
 }
 
 h2 {
-    color: #0066cc;
+    color: #ffffff;
 }
 
 span {
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
 }
 
 .navbar a.active {
@@ -84,6 +106,10 @@ span {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+#monitor {
+  padding-bottom: 10vh;
 }
 
 
@@ -138,20 +164,17 @@ span {
   margin-bottom: 20px;
 }
 
-body {
-  background-color: #ffffff;
-  color: #000000;
-  font-family: sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
 .monitor-img {
   display: block;
   margin: 60px auto 30px auto;
   max-width: 80%;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.mos-img {
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
 }
 
 .item img {
@@ -165,6 +188,15 @@ body {
   color: #0078d7;
   text-align: center;
   font-weight: bold;
+}
+
+.footer {
+  color: #ffffff;
+  margin-top: 6vh;
+}
+
+#footer-text{
+  color: #000000;
 }
 
 html {

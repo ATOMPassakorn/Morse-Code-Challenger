@@ -17,20 +17,27 @@
     </div>
   </nav>
 
-  <div class="content" id="monitor">
-    <h1><b>Morse Code Monitor</b></h1>
-    <p>Time left: <span id="timer">30</span> sec</p>
-    <p>Code: <span id="morse"></span></p>
-    <p>Decoded: <span id="decoded"></span></p>
-    <p>Word: <span id="target"></span></p>
-    <button type="button" class="btn btn-outline-success" onclick="setFirstEnterFalse()">Start!</button>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <img src="mos.jpg" alt="Morse Code" class="mos-img">
-  </div>
+  <section class="homepage">
+    <div class="content-bg">
+      <div class="content" id="monitor">
+        <h1><b>Morse Code Monitor</b></h1>
+        <br>
+        <br>
+        <p>Time left: <span id="timer">30</span> sec</p>
+        <p>Code: <span id="morse"></span></p>
+        <p>Decoded: <span id="decoded"></span></p>
+        <p>Word: <span id="target"></span></p>
+        <button type="button" class="btn btn-success" onclick="setFirstEnterFalse()">Start!</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <img src="mos.jpg" alt="Morse Code" class="mos-img">
+      </div>
+    </div>
+  </section>
+  <p class="footer">Create by <span id="footer-text">Morse Code Challenger Team</span></p>
 
   <script>
   const arduinoIP = "http://172.20.10.3"; // เปลี่ยนเป็น IP ของบอร์ดคุณ
