@@ -56,9 +56,6 @@
         clearInterval(timerInterval); // หยุดนับถอยหลัง
         gameStarted = false;
 
-        // เรียก endpoint ใหม่สำหรับตอนตอบถูก (ไม่มีไฟแดง)
-        await fetch(`${arduinoIP}/correctReset`); 
-
         // รีเซ็ตหน้าจอเว็บ
         document.getElementById("timer").innerText = 30;
         document.getElementById("morse").innerText = "";
