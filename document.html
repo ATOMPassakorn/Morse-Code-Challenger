@@ -17,12 +17,41 @@
     </div>
   </nav>
 
-  <div class="content">
-    <h1>Morse Code Monitor Project</h1>
-    <h2>บทคัดย่อ (Abstract)</h2>
-    <p>This project is designed to receive Morse code input through buttons,<br>
-       decode it into English letters, and display the results on an LCD screen and a web interface via Wi-Fi.</p>
-  </div>
+    <section class="abstract-section">
+    <div class="container">
+      <h1 class="project-title">Morse Code Monitor Project</h1>
+
+      <div class="abstract-box">
+        <h2>บทคัดย่อ (Abstract)</h2>
+        <p>
+        โครงงานเรื่อง <b>Morse Code Monitor</b> มีวัตถุประสงค์ในการออกแบบและพัฒนาอุปกรณ์ที่สามารถแปลรหัสมอร์ส (Morse Code)
+        เป็นตัวอักษรภาษาอังกฤษได้ พร้อมทั้งเชื่อมต่อกับระบบเครือข่ายอินเทอร์เน็ตเพื่อแสดงผลแบบเรียลไทม์
+        โดยใช้อุปกรณ์หลักคือบอร์ด <b>Arduino UNO R4 WiFi</b> ซึ่งมีความสามารถในการประมวลผลและเชื่อมต่อ Wi-Fi ได้ในตัว
+        </p>
+
+        <p>
+        ระบบประกอบด้วย <b>ปุ่มกด (Push Button)</b> สำหรับส่งสัญญาณรหัสมอร์สในรูปแบบจุด (.) และขีด (-)
+        และมีปุ่ม <b>Enter</b> และ <b>Delete</b> สำหรับการยืนยันและลบข้อมูล
+        โดยแสดงผลบนจอ <b>LCD 16x2</b> เพื่อแสดงตัวอักษรที่ถอดรหัสแล้ว
+        บอร์ด Arduino ถูกโปรแกรมให้สามารถแยกแยะระยะเวลาการกดปุ่มเพื่อระบุรหัสแต่ละตัว
+        และแปลงรหัสมอร์สเป็นตัวอักษรภาษาอังกฤษตามตารางมาตรฐาน
+        พร้อมส่งข้อมูลผ่านเครือข่าย Wi-Fi เพื่อแสดงผลแบบเรียลไทม์
+        </p>
+
+        <p>
+        ระบบสามารถตรวจจับสัญญาณมอร์สจากการกดปุ่มได้อย่างถูกต้อง
+        แปลงเป็นตัวอักษรภาษาอังกฤษได้ครบถ้วน และแสดงผลบนจอ LCD ได้อย่างแม่นยำ
+        อีกทั้งยังสามารถเชื่อมต่อและสื่อสารกับอุปกรณ์ภายนอกผ่านระบบ Wi-Fi ได้ตามที่ออกแบบไว้
+        โครงงาน <b>Morse Code Monitor</b> จึงทำงานได้ตรงตามวัตถุประสงค์
+        และเป็นแนวทางที่เหมาะสมสำหรับการประยุกต์ใช้ระบบไมโครคอนโทรลเลอร์ในงานสื่อสารข้อมูลเบื้องต้น
+        รวมถึงเทคโนโลยี <b>Internet of Things (IoT)</b>
+        </p>
+
+
+      </div>
+    </div>
+  </section>
+
 
   <div class="content">
     <h2>Morse Code Monitor Project Video</h2>
