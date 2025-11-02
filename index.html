@@ -33,20 +33,18 @@
         <br>
         <br>
         <br>
-        <img src="mos.jpg" alt="Morse Code" class="mos-img">
+        <img src="picture/mos.jpg" alt="Morse Code" class="mos-img">
       </div>
     </div>
   </section>
   <p class="footer">Create by <span id="footer-text">Morse Code Challenger Team</span></p>
 
   <script>
-  const arduinoIP = "http://172.20.10.3"; // เปลี่ยนเป็น IP ของบอร์ดคุณ
+  const arduinoIP = "http://172.20.10.3"; // เปลี่ยนเป็น IP ของบอร์ด
   let gameStarted = false;
   let countdown = 30;
   let timerInterval;
 
-
-// โค้ดใหม่ที่แก้ไขแล้ว
   async function update() {
     try {
       const res = await fetch(`${arduinoIP}/data`);
@@ -61,7 +59,7 @@
         document.getElementById("morse").innerText = "";
         document.getElementById("decoded").innerText = "";
         document.getElementById("target").innerText = "";
-        return; // ออกจากการทำงาน
+        return;
       }
 
       if (!gameStarted) return;
