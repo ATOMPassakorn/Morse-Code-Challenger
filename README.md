@@ -28,7 +28,7 @@ Input 2 ส่วน ได้แก่
 
 ## <a href="https://youtu.be/ajV1VXcn514?si=H77NlsQdsmAG1L5m" target="_blank">Project Presentation Video</a>
 
-## <a href="" target="_blank">Project Presentation Poster</a>
+## <a href="https://drive.google.com/file/d/1u2J5iUthBPPYMLoUDTQdwJ8oRgWoWutD/view?usp=sharing" target="_blank">Project Presentation Poster</a>
 
 ## สมาชิกกลุ่ม
 |รหัสนักศึกษา|ชื่อ|นามสกุล|
