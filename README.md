@@ -26,9 +26,9 @@ Input 2 ส่วน ได้แก่
 
 โปรเจคนี้สามารถประยุกต์ใช้ได้ทั้งในเชิงการศึกษา การฝึกฝนการเข้ารหัสข้อความ และการสื่อสารในกรณีฉุกเฉินที่ไม่สามารถใช้เสียงหรือข้อความได้ตามปกติ
 
-## [Project Presentation Video](https://youtu.be/ajV1VXcn514?si=H77NlsQdsmAG1L5m){:target="_blank"}
+## <a href="https://youtu.be/ajV1VXcn514?si=H77NlsQdsmAG1L5m" target="_blank">Project Presentation Video</a>
 
-## [Project Presentation Poster](){:target="_blank"}
+## <a href="" target="_blank">Project Presentation Poster</a>
 
 ## สมาชิกกลุ่ม
 |รหัสนักศึกษา|ชื่อ|นามสกุล|
